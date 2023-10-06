@@ -1,4 +1,4 @@
-# gAIns: AI Training App
+# gAIns - AI Training App
 
 _The intelligent training app for strength athletes and coaches._
 
