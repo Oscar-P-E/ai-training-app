@@ -16,11 +16,11 @@ As a coach, your time is limited. gAIns can help you to save time by automating 
 
 ### I'm a casual lifter and/or I'm relatively new to strength training. Can I still use gAIns?
 
-Yes! gAIns is suitable even for beginners. While basic and generic training programs work perfectly well for beginners, you will not be a beginner forever. At some point, you will need to learn more about training and programming (or hire a coach). gAIns can help you to learn more about training and programming by providing you with data driven insights into your training. It can also help you to make better decisions by providing you with personalized training adjustments, progression, and recommendations.
+Yes! gAIns is suitable even for **beginners**. While basic and generic training programs work perfectly well for beginners, you will not be a beginner forever. At some point, you will need to learn more about training and programming (or hire a coach). gAIns can help you to learn more about training and programming by providing you with data driven insights into your training. It can also help you to make better decisions by providing you with personalized training adjustments, progression, and recommendations.
 
-Intermediate trainees can still make progress with basic programs, but noticibly less than more intelligent programming.
+**Intermediate** trainees can still make progress with basic programs, but noticibly less than more intelligent programming.
 
-Advanced trainees are no longer able to make progress with basic approaches. They need more intelligent programming for even the possibility of making progress. When you start to approach the limits of genetics and the human body, there is no guaranteed progress. You need to use everything you can.
+**Advanced** trainees are no longer able to make progress with basic approaches. They need more intelligent programming for even the possibility of making progress. When you start to approach the limits of genetics and the human body, there is no guaranteed progress. You need to use everything you can.
 
 ## Technical Details for interested parties
 
