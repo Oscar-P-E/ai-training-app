@@ -24,4 +24,4 @@ Yes! gAIns is suitable even for **beginners**. While basic and generic training 
 
 ## Technical Details for interested parties
 
-This app was built using the T3 Stack, which is a full stack framework for building web apps. It was built using **React**, **TypeScript**, **Next.js**, **Clerk**, **Prisma**, **Tailwind CSS**, **tRPC**, and deployed with **Vercel**.
+This app was built using the T3 Stack, which is a full stack framework for building web apps. It was built using React, TypeScript, Next.js, Clerk, Prisma, Tailwind CSS, tRPC, and deployed on Vercel.
