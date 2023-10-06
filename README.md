@@ -1,29 +1,27 @@
-# Create T3 App
+# gAIns - An AI Training App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+The intelligent training app for strength athletes and coaches.
 
-## What's next? How do I make an app with this?
+## What is gAIns?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+gAIns is an AI training app that helps strength athletes and coaches to train more efficiently and effectively. It is a web app that analyses your training data and provides you with personalized training adjustments, progression, and recommendations.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## As an athlete (or recreational lifter that wants to employ a more scientific approach to training), why use gAIns?
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Unless you receive coaching from a qualified coach, you are not training as effectively as you could be. All training programs available online, whether for free or paid - even if made by a qualified coach - are not personalized to you. They are not based on your training history, your strengths and weaknesses, your recovery, your lifestyle, your goals, and your preferences. Furthermore, many aspects of these programs have to be simplified so that they can be self administered by non coaches. This means that you are not training as effectively as you could be.
 
-## Learn More
+## As a coach, I already know how to program for my athletes. Why would I use gAIns?
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+As a coach, your time is limited. gAIns can help you to save time by automating as much of the programming process as you want. It can also help you to make better decisions by providing you with data driven insights into your athletes' training. We understand that not all coaches program the same way, so you are free to override the AI's recommendations if and when you want to. You still have full control over your athletes' training.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## I'm a casual lifter and/or I'm relatively new to strength training. Can I still use gAIns?
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Yes! gAIns is suitable even for beginners. While basic and generic training programs work perfectly well for beginners, you will not be a beginner forever. At some point, you will need to learn more about training and programming (or hire a coach). gAIns can help you to learn more about training and programming by providing you with data driven insights into your training. It can also help you to make better decisions by providing you with personalized training adjustments, progression, and recommendations.
 
-## How do I deploy this?
+Intermediate trainees can still make progress with basic programs, but noticibly less than more intelligent programming.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
-# ai-training-app
+Advanced trainees are no longer able to make progress with basic approaches. They need more intelligent programming for even the possibility of making progress. When you start to approach the limits of genetics and the human body, there is no guaranteed progress. You need to use everything you can.
+
+## Technical Details for interested parties
+
+This app is built using the T3 Stack, which is a full stack framework for building web apps. It is built using **React**, **TypeScript**, **Next.js**, **Clerk**, **Prisma**, **Tailwind CSS**, and **tRPC**. It is deployed on Vercel.
