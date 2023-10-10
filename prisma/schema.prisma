@@ -9,49 +9,50 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(cuid())
-  email       String       @unique
-  name        String
-  macrocycles Macrocycle[]
-}
-
-model Macrocycle {
   id         String      @id @default(cuid())
+  email      String      @unique
   name       String
-  user       User        @relation(fields: [userId], references: [id])
-  userId     String
   mesocycles Mesocycle[]
 }
 
 model Mesocycle {
-  id           String       @id @default(cuid())
-  name         String
-  macrocycle   Macrocycle   @relation(fields: [macrocycleId], references: [id])
-  macrocycleId String
-  microcycles  Microcycle[]
+  id          String       @id @default(cuid())
+  name        String
+  microcycles Microcycle[]
+  User        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String
+
+  @@index([userId])
 }
 
 model Microcycle {
   id          String    @id @default(cuid())
   name        String
-  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id])
+  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mesocycleId String
   workouts    Workout[]
+
+  @@index([mesocycleId])
 }
 
 model Workout {
   id           String     @id @default(cuid())
   name         String
-  microcycle   Microcycle @relation(fields: [microcycleId], references: [id])
+  microcycle   Microcycle @relation(fields: [microcycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   microcycleId String
   exercises    Exercise[]
+
+  @@index([microcycleId])
 }
 
 model Exercise {
   id       String    @id @default(cuid())
   name     String    @unique
   workouts Workout[]
-  muscles  Muscle[]
+  muscle   Muscle    @relation(fields: [muscleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  muscleId String
+
+  @@index([muscleId])
 }
 
 model Muscle {

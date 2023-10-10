@@ -4,7 +4,17 @@
 
 @layer utilities {
   .h-100dvh {
-    height: 100vh; /* fallback for Opera, IE and etc. */
+    height: 100vh; /* fallback for Opera, IE, etc. */
     height: 100dvh;
+  }
+}
+
+body {
+  @apply bg-black text-slate-100;
+}
+
+@layer base {
+  .button-radio-input {
+    display: none;
   }
 }
