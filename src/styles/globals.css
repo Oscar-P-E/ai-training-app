@@ -1,6 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Sintony:wght@400;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply font-body bg-neutral-950 text-neutral-200;
+}
 
 @layer utilities {
   .h-100dvh {
@@ -9,12 +15,15 @@
   }
 }
 
-body {
-  @apply bg-black text-slate-100;
+.button-radio-input {
+  display: none;
 }
 
-@layer base {
-  .button-radio-input {
-    display: none;
-  }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Webkit-based browsers eg. Chrome, Safari, Opera... */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

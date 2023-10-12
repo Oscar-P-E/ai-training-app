@@ -12,15 +12,17 @@ const filterUserForClient = (user: User) => {
 
 export const mesocyclesRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const mesos = await ctx.db.mesocycle.findMany();
+    const mesos = await ctx.db.mesocycle.findMany({
+      where: {
+        // userId: ctx.currentUser.id,
+      },
+    });
 
     const users = (
       await clerkClient.users.getUserList({
-        userId: mesos.map((m) => m.userId),
+        userId: mesos.map((mes) => mes.userId),
       })
     ).map(filterUserForClient);
-
-    console.log(users);
 
     return mesos.map((meso) => ({
       meso,
