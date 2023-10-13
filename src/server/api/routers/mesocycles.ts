@@ -27,7 +27,7 @@ export const mesocyclesRouter = createTRPCRouter({
     return mesos.map((meso) => ({
       meso,
       name: meso.name,
-      owner: users.find((user) => user.id === meso.userId) ?? null,
+      owner: users.find((user) => user.id === meso.userId),
     }));
   }),
 });

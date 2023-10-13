@@ -4,8 +4,54 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-primary {
+  @apply bg-neutral-950;
+}
+
+.text-primary {
+  @apply text-neutral-200;
+}
+
+.border-primary {
+  @apply border-neutral-200;
+}
+
+.bg-secondary {
+  @apply bg-neutral-900;
+}
+
+.bg-accent {
+  @apply bg-red-700;
+}
+
+.text-accent {
+  @apply text-red-700;
+}
+
+.border-accent {
+  @apply border-red-700;
+}
+
+.bg-special {
+  @apply bg-indigo-900;
+}
+
+.text-special {
+  @apply text-indigo-300;
+}
+
+.card {
+  @apply bg-secondary p-4;
+}
+
 body {
-  @apply font-body bg-neutral-950 text-neutral-200;
+  @apply font-body bg-primary text-primary;
+}
+
+input,
+select,
+option {
+  @apply bg-primary px-1 text-center text-sm;
 }
 
 @layer utilities {
