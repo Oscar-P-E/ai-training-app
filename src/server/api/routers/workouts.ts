@@ -5,10 +5,14 @@ export const workoutsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const workouts = await ctx.db.workout.findMany({
       include: {
-        exercises: true, // Eager load exercises
+        microcycle: true, // Eager load
+        exercises: true, // Eager load
       },
     });
-    return workouts;
+    return workouts.map((workout) => ({
+      workout,
+      // name: workout.name,
+    }));
   }),
 });
 

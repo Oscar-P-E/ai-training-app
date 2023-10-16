@@ -1,6 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { SignIn, useUser, UserButton } from "@clerk/nextjs";
-import { Mesocycle, User, Workout, type Exercise } from "@prisma/client";
+// import {
+//   User,
+//   Mesocycle,
+//   Microcycle,
+//   Workout,
+//   Exercise,
+// } from "@prisma/client";
 
 import { api } from "~/utils/api";
 
@@ -18,45 +24,66 @@ import { api } from "~/utils/api";
 export default function Home() {
   const user = useUser();
 
-  const { data: exData, isLoading: exIsLoading } =
-    api.exercises.getAll.useQuery();
-
   const { data: mesoData, isLoading: mesoIsLoading } =
     api.mesocycles.getAll.useQuery();
+
+  const { data: microData, isLoading: microIsLoading } =
+    api.microcycles.getAll.useQuery();
 
   const { data: workoutData, isLoading: workoutIsLoading } =
     api.workouts.getAll.useQuery();
 
-  if (exIsLoading || mesoIsLoading || workoutIsLoading) {
+  const { data: exData, isLoading: exIsLoading } =
+    api.exercises.getAll.useQuery();
+
+  if (exIsLoading || mesoIsLoading || workoutIsLoading || microIsLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!exData || !mesoData || !workoutData) {
+  if (!exData || !mesoData || !workoutData || !microData || !user.user) {
     return <div>Error loading data</div>;
   }
 
-  const userMesos = () => {
-    return mesoData.filter((meso) => meso.meso.userId === user.user?.id);
+  const getCurrUserMesos = () => {
+    return mesoData.filter(({ meso }) => meso.userId === user.user.id);
   };
 
-  console.log(userMesos());
+  const getCurrMeso = () => {
+    return getCurrUserMesos()[0]?.meso; // todo
+  };
 
-  //   workoutData.map((workout) => {
-  //     const exercisesInWorkout = workout.exercises; // Directly use eager-loaded exercises
-  // return exercisesInWorkout.map((exercise) => {  });
+  const getCurrMesoMicros = () => {
+    return microData.filter(
+      ({ micro }) => micro.mesocycleId === getCurrMeso()?.id,
+    );
+  };
 
-  // const exercisesInAWorkout = workoutData.map((workout) => {
-  //   return workout.exercises;
-  // });
+  const getCurrMicro = () => {
+    return getCurrMesoMicros()[0]?.micro; // todo
+  };
 
-  const thisWorkout = workoutData.slice(1, 2); // todo
+  const getCurrMicroWorkouts = () => {
+    return workoutData.filter(
+      ({ workout }) => workout.microcycleId === getCurrMicro()?.id,
+    );
+  };
 
-  const getTheseExercises = () => {
-    const array = thisWorkout.map((workout) => {
-      return workout.exercises;
-    });
+  const getCurrWorkout = () => {
+    const currMicro = getCurrMicro();
+    if (currMicro && currMicro.workouts.length > 0) {
+      return currMicro.workouts[0];
+    }
+    return undefined;
+  };
 
-    return array.flat();
+  const getCurrWorkoutExercises = () => {
+    const currWorkout = getCurrWorkout();
+    if (currWorkout) {
+      return exData.filter(({ exercise }) =>
+        exercise.workouts.includes(currWorkout),
+      );
+    }
+    return undefined;
   };
 
   return (
@@ -84,18 +111,17 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-4">
                 <div className="card border-neutral flex flex-col items-center border-y font-bold">
-                  {mesoData.map(({ meso }) => (
-                    <div key={meso.id} className="text-lg">
-                      {/* todo: only get mesos for current user */}
-                      {/* {meso.userId === "clnkb640c00001y7htytliavl" && meso.name} */}
-                      {meso.userId === user.user?.id && meso.name}
-                    </div>
-                  ))}
+                  <div key={getCurrMeso()?.id} className="text-lg">
+                    {/* todo: only get mesos for current user */}
+                    {/* {meso.userId === "clnkb640c00001y7htytliavl" && meso.name} */}
+                    {getCurrMeso()?.name}
+                  </div>
+
                   <div className="flex gap-2 pt-1 text-sm">
                     Week 1 Day 1<span>•</span>
-                    {thisWorkout.map((workout) => (
-                      <div key={workout.id}>{workout.name}</div>
-                    ))}
+                    <div key={getCurrWorkout()?.id}>
+                      {getCurrWorkout()?.name}
+                    </div>
                   </div>
                 </div>
 
@@ -105,7 +131,7 @@ export default function Home() {
                   ))}
                 </div> */}
 
-                {getTheseExercises().map((exercise) => (
+                {getCurrWorkoutExercises()?.map(({ exercise }) => (
                   <div key={exercise.id} className="card flex flex-col gap-4">
                     <div className="font-bold">{exercise.name}</div>
                     <div className="grid grid-cols-4 gap-4">
