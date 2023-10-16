@@ -1,7 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import { SignIn, useUser, UserButton } from "@clerk/nextjs";
+import { Mesocycle, User, Workout, type Exercise } from "@prisma/client";
 
 import { api } from "~/utils/api";
+
+// const createWizard = () => {
+//   const { user } = useUser();
+//   if (!user) return null;
+
+//   return (
+//     <div>
+//       <img src={user.imageUrl} alt="" />
+//     </div>
+//   );
+// };
 
 export default function Home() {
   const user = useUser();
@@ -22,6 +34,30 @@ export default function Home() {
   if (!exData || !mesoData || !workoutData) {
     return <div>Error loading data</div>;
   }
+
+  const userMesos = () => {
+    return mesoData.filter((meso) => meso.meso.userId === user.user?.id);
+  };
+
+  console.log(userMesos());
+
+  //   workoutData.map((workout) => {
+  //     const exercisesInWorkout = workout.exercises; // Directly use eager-loaded exercises
+  // return exercisesInWorkout.map((exercise) => {  });
+
+  // const exercisesInAWorkout = workoutData.map((workout) => {
+  //   return workout.exercises;
+  // });
+
+  const thisWorkout = workoutData.slice(1, 2); // todo
+
+  const getTheseExercises = () => {
+    const array = thisWorkout.map((workout) => {
+      return workout.exercises;
+    });
+
+    return array.flat();
+  };
 
   return (
     <>
@@ -51,12 +87,15 @@ export default function Home() {
                   {mesoData.map(({ meso }) => (
                     <div key={meso.id} className="text-lg">
                       {/* todo: only get mesos for current user */}
-                      {meso.userId === "clnkb640c00001y7htytliavl" && meso.name}
+                      {/* {meso.userId === "clnkb640c00001y7htytliavl" && meso.name} */}
+                      {meso.userId === user.user?.id && meso.name}
                     </div>
                   ))}
                   <div className="flex gap-2 pt-1 text-sm">
                     Week 1 Day 1<span>•</span>
-                    {workoutData[0]?.name}
+                    {thisWorkout.map((workout) => (
+                      <div key={workout.id}>{workout.name}</div>
+                    ))}
                   </div>
                 </div>
 
@@ -66,9 +105,9 @@ export default function Home() {
                   ))}
                 </div> */}
 
-                {exData.map((exercises) => (
-                  <div key={exercises.id} className="card flex flex-col gap-4">
-                    <div className="font-bold">{exercises.name}</div>
+                {getTheseExercises().map((exercise) => (
+                  <div key={exercise.id} className="card flex flex-col gap-4">
+                    <div className="font-bold">{exercise.name}</div>
                     <div className="grid grid-cols-4 gap-4">
                       <div>Weight</div>
                       <div>Reps</div>
