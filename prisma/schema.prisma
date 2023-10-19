@@ -8,55 +8,87 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-  id         String      @id @default(cuid())
-  email      String      @unique
-  name       String
-  mesocycles Mesocycle[]
-}
-
 model Mesocycle {
-  id          String       @id @default(cuid())
-  name        String
-  microcycles Microcycle[]
-  User        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId      String
-
-  @@index([userId])
+  id      String @id @default(cuid())
+  name    String
+  ownerId String
+  weeks   Week[]
 }
 
-model Microcycle {
-  id          String    @id @default(cuid())
-  name        String
+model Week {
+  id   String @id @default(cuid())
+  name String
+  days Day[]
+
   mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mesocycleId String
-  workouts    Workout[]
 
   @@index([mesocycleId])
 }
 
-model Workout {
-  id           String     @id @default(cuid())
-  name         String
-  microcycle   Microcycle @relation(fields: [microcycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  microcycleId String
-  exercises    Exercise[]
+model Day {
+  id        String     @id @default(cuid())
+  name      String
+  exercises Exercise[]
+  dayLabel  DayLabel?
 
-  @@index([microcycleId])
+  week   Week   @relation(fields: [weekId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  weekId String
+  Set    Set[]
+
+  @@index([weekId])
 }
 
 model Exercise {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  workouts Workout[]
-  muscle   Muscle    @relation(fields: [muscleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  muscleId String
+  id          String       @id @default(cuid())
+  name        String       @unique
+  muscleGroup MuscleGroup?
+  sets        Set[]
 
-  @@index([muscleId])
+  days Day[]
+
+  @@index([id])
+  @@index([muscleGroup])
 }
 
-model Muscle {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  exercises Exercise[]
+model Set {
+  id     String @id @default(cuid())
+  reps   Int?
+  weight Int?
+  rir    Int?
+  order  Int
+
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  exerciseId String
+  day        Day      @relation(fields: [dayId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dayId      String
+
+  @@index([exerciseId])
+  @@index([dayId])
+}
+
+enum MuscleGroup {
+  CHEST
+  BACK_HORIZONTAL
+  BACK_VERTICAL
+  SHOULDERS_TRAPS
+  BICEPS
+  TRICEPS
+  QUADS
+  HAMS
+  GLUTES
+  FOREARMS
+  CALVES
+  ABS
+  REAR_DELTS_RHOMB
+}
+
+enum DayLabel {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }

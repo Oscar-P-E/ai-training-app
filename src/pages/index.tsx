@@ -1,87 +1,73 @@
 /* eslint-disable @next/next/no-img-element */
 import { SignIn, useUser, UserButton } from "@clerk/nextjs";
-// import {
-//   User,
-//   Mesocycle,
-//   Microcycle,
-//   Workout,
-//   Exercise,
-// } from "@prisma/client";
 
 import { api } from "~/utils/api";
 
-// const createWizard = () => {
-//   const { user } = useUser();
-//   if (!user) return null;
-
-//   return (
-//     <div>
-//       <img src={user.imageUrl} alt="" />
-//     </div>
-//   );
-// };
-
 export default function Home() {
-  const user = useUser();
+  const { user, isLoaded: userIsLoaded, isSignedIn } = useUser();
+
+  // user_2WNbTGz64IpsFgkkNlkTzeqaolI
 
   const { data: mesoData, isLoading: mesoIsLoading } =
     api.mesocycles.getAll.useQuery();
 
-  const { data: microData, isLoading: microIsLoading } =
-    api.microcycles.getAll.useQuery();
+  const { data: weekData, isLoading: weekIsLoading } =
+    api.weeks.getAll.useQuery();
 
-  const { data: workoutData, isLoading: workoutIsLoading } =
-    api.workouts.getAll.useQuery();
+  const { data: dayData, isLoading: dayIsLoading } =
+    api.days.getAll.useQuery();
 
   const { data: exData, isLoading: exIsLoading } =
     api.exercises.getAll.useQuery();
 
-  if (exIsLoading || mesoIsLoading || workoutIsLoading || microIsLoading) {
+  if (
+    exIsLoading ||
+    mesoIsLoading ||
+    dayIsLoading ||
+    weekIsLoading ||
+    !userIsLoaded
+  ) {
     return <div>Loading...</div>;
   }
 
-  if (!exData || !mesoData || !workoutData || !microData || !user.user) {
+  if (!exData || !mesoData || !dayData || !weekData || !user) {
     return <div>Error loading data</div>;
   }
 
   const getCurrUserMesos = () => {
-    return mesoData.filter(({ meso }) => meso.userId === user.user.id);
+    return mesoData.filter(({ meso }) => meso.ownerId === user.id);
   };
 
   const getCurrMeso = () => {
     return getCurrUserMesos()[0]?.meso; // todo
   };
 
-  const getCurrMesoMicros = () => {
-    return microData.filter(
-      ({ micro }) => micro.mesocycleId === getCurrMeso()?.id,
+  const getCurrMesoWeeks = () => {
+    return weekData.filter(
+      ({ week }) => week.mesocycleId === getCurrMeso()?.id,
     );
   };
 
-  const getCurrMicro = () => {
-    return getCurrMesoMicros()[0]?.micro; // todo
+  const getCurrWeek = () => {
+    return getCurrMesoWeeks()[0]?.week; // todo
   };
 
-  const getCurrMicroWorkouts = () => {
-    return workoutData.filter(
-      ({ workout }) => workout.microcycleId === getCurrMicro()?.id,
-    );
+  const getCurrWeekDays = () => {
+    return dayData.filter(({ day }) => day.weekId === getCurrWeek()?.id);
   };
 
-  const getCurrWorkout = () => {
-    const currMicro = getCurrMicro();
-    if (currMicro && currMicro.workouts.length > 0) {
-      return currMicro.workouts[0];
+  const getCurrDay = () => {
+    const currWeek = getCurrWeek();
+    if (currWeek && currWeek.days.length > 0) {
+      return currWeek.days[0];
     }
     return undefined;
   };
 
-  const getCurrWorkoutExercises = () => {
-    const currWorkout = getCurrWorkout();
-    if (currWorkout) {
-      return exData.filter(({ exercise }) =>
-        exercise.workouts.includes(currWorkout),
-      );
+  const getCurrDayExercises = () => {
+    const currDay = getCurrDay();
+    if (currDay) {
+      return exData.filter(({ exercise }) => exercise.days.includes(currDay));
     }
     return undefined;
   };
@@ -104,11 +90,12 @@ export default function Home() {
                   <div className="text-sm font-bold">gAIns AI Training App</div>
                   {/* </div> */}
                   <div className="bg-primary h-8 w-8 rounded-full">
-                    {!user.isSignedIn && <SignIn />}
-                    {!!user.isSignedIn && <UserButton afterSignOutUrl="/" />}
+                    {!isSignedIn && <SignIn />}
+                    {isSignedIn && <UserButton afterSignOutUrl="/" />}
                   </div>
                 </div>
               </div>
+
               <div className="flex flex-col gap-4">
                 <div className="card border-neutral flex flex-col items-center border-y font-bold">
                   <div key={getCurrMeso()?.id} className="text-lg">
@@ -119,19 +106,17 @@ export default function Home() {
 
                   <div className="flex gap-2 pt-1 text-sm">
                     Week 1 Day 1<span>•</span>
-                    <div key={getCurrWorkout()?.id}>
-                      {getCurrWorkout()?.name}
-                    </div>
+                    <div key={getCurrDay()?.id}>{getCurrDay()?.name}</div>
                   </div>
                 </div>
 
                 {/* <div className="card bg-secondary flex justify-between text-center">
-                  {[...workoutData].map((workouts) => (
-                    <div key={workouts.id}>{workouts.name}</div>
+                  {[...dayData].map((days) => (
+                    <div key={days.id}>{days.name}</div>
                   ))}
                 </div> */}
 
-                {getCurrWorkoutExercises()?.map(({ exercise }) => (
+                {getCurrDayExercises()?.map(({ exercise }) => (
                   <div key={exercise.id} className="card flex flex-col gap-4">
                     <div className="font-bold">{exercise.name}</div>
                     <div className="grid grid-cols-4 gap-4">

@@ -10,11 +10,11 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 //   };
 // };
 
-export const microcyclesRouter = createTRPCRouter({
+export const weeksRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const micros = await ctx.db.microcycle.findMany({
+    const weeks = await ctx.db.week.findMany({
       include: {
-        workouts: true,
+        days: true,
       },
     });
 
@@ -24,8 +24,8 @@ export const microcyclesRouter = createTRPCRouter({
     //   })
     // ).map(filterUserForClient);
 
-    return micros.map((micro) => ({
-      micro,
+    return weeks.map((week) => ({
+      week,
       // name: meso.name,
       // owner: users.find((user) => user.id === meso.userId),
     }));

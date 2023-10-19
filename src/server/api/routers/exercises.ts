@@ -4,10 +4,9 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const exercisesRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    // return ctx.db.exercise.findMany();
     const exercises = await ctx.db.exercise.findMany({
       include: {
-        workouts: true, // Eager load
+        days: true, // Eager load
       },
     });
 

@@ -1,7 +1,7 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { mesocyclesRouter } from "./routers/mesocycles";
-import { microcyclesRouter } from "./routers/microcycles";
-import { workoutsRouter } from "./routers/workouts";
+import { weeksRouter } from "./routers/weeks";
+import { daysRouter } from "./routers/days";
 import { exercisesRouter } from "./routers/exercises";
 
 /**
@@ -11,8 +11,8 @@ import { exercisesRouter } from "./routers/exercises";
  */
 export const appRouter = createTRPCRouter({
   mesocycles: mesocyclesRouter,
-  microcycles: microcyclesRouter,
-  workouts: workoutsRouter,
+  weeks: weeksRouter,
+  days: daysRouter,
   exercises: exercisesRouter,
 });
 
