@@ -44,6 +44,7 @@ model Exercise {
   name        String       @unique
   muscleGroup MuscleGroup?
   sets        Set[]
+  order       Int?
 
   days Day[]
 
@@ -55,7 +56,7 @@ model Set {
   id     String @id @default(cuid())
   reps   Int?
   weight Int?
-  rir    Int?
+  rpe    Float?
   order  Int
 
   exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
