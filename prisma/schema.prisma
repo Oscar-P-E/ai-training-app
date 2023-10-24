@@ -9,34 +9,30 @@ datasource db {
 }
 
 model Mesocycle {
-  id      String @id @default(cuid())
+  id      String  @id @default(cuid())
   name    String
   ownerId String
-  weeks   Week[]
-}
-
-model Week {
-  id   String @id @default(cuid())
-  name String
-  days Day[]
-
-  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mesocycleId String
-
-  @@index([mesocycleId])
+  days    Day[]
+  active  Boolean @default(false)
 }
 
 model Day {
-  id        String     @id @default(cuid())
-  name      String
-  exercises Exercise[]
-  dayLabel  DayLabel?
+  id         String     @id @default(cuid())
+  exercises  Exercise[]
+  dayLabel   DayLabel?
+  weekNumber Int
+  dayNumber  Int
+  completed  Boolean    @default(false)
 
-  week   Week   @relation(fields: [weekId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  weekId String
-  Set    Set[]
+  mesocycle   Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mesocycleId String
+  sets        Set[]
+  dayNote     Note?     @relation(fields: [dayNoteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dayNoteId   String?   @unique
 
-  @@index([weekId])
+  @@index([mesocycleId])
+  @@index([weekNumber])
+  @@index([dayNoteId])
 }
 
 model Exercise {
@@ -45,27 +41,45 @@ model Exercise {
   muscleGroup MuscleGroup?
   sets        Set[]
   order       Int?
+  bodyweight  Boolean?
 
-  days Day[]
+  days     Day[]
+  exNote   Note?   @relation(fields: [exNoteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  exNoteId String? @unique
 
   @@index([id])
   @@index([muscleGroup])
+  @@index([exNoteId])
 }
 
 model Set {
-  id     String @id @default(cuid())
-  reps   Int?
-  weight Int?
-  rpe    Float?
-  order  Int
+  id              String  @id @default(cuid())
+  goalReps        Int?
+  completedReps   Int?
+  goalWeight      Int?
+  completedWeight Int?
+  goalRpe         Float?
+  completedRpe    Float?
+  completed       Boolean @default(false)
+  order           Int
 
-  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
   exerciseId String
-  day        Day      @relation(fields: [dayId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  day        Day      @relation(fields: [dayId], references: [id])
   dayId      String
 
   @@index([exerciseId])
   @@index([dayId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  day      Day?
+  exercise Exercise?
 }
 
 enum MuscleGroup {

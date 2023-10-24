@@ -31,7 +31,6 @@ export default function Home() {
               </div>
 
               <DayView />
-              
 
               <div className="bg-secondary sticky -bottom-4 flex items-start justify-between px-6 pb-8 pt-4">
                 <div className="text-accent text-sm">Cancel</div>

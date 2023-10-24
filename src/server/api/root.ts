@@ -1,8 +1,8 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { mesocyclesRouter } from "./routers/mesocycles";
-import { weeksRouter } from "./routers/weeks";
 import { daysRouter } from "./routers/days";
 import { exercisesRouter } from "./routers/exercises";
+import { setsRouter } from "./routers/sets";
 
 /**
  * This is the primary router for your server.
@@ -11,9 +11,9 @@ import { exercisesRouter } from "./routers/exercises";
  */
 export const appRouter = createTRPCRouter({
   mesocycles: mesocyclesRouter,
-  weeks: weeksRouter,
   days: daysRouter,
   exercises: exercisesRouter,
+  sets: setsRouter,
 });
 
 // export type definition of API

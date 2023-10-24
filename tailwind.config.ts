@@ -14,10 +14,25 @@ export default {
       //   "4xl": "3.158rem",
       //   "5xl": "4.210rem",
       // },
+      // colors: {
+      //   'text': 'var(--text)',
+      //   'background': 'var(--background)',
+      //   'primary': 'var(--primary)',
+      //   'secondary': 'var(--secondary)',
+      //   'accent': 'var(--accent)',
+      //  },
       fontFamily: {
         heading: "Sintony",
         body: "Sintony",
       },
+      // fontFamily: {
+      //   heading: 'Noto Sans Gothic',
+      //   body: 'Noto Sans Gothic',
+      // },
+      // fontWeight: {
+      //   normal: '400',
+      //   bold: '700',
+      // },
     },
   },
   plugins: [],

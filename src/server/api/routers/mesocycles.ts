@@ -13,9 +13,9 @@ const filterUserForClient = (user: User) => {
 export const mesocyclesRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const mesos = await ctx.db.mesocycle.findMany({
-      include: {
-        weeks: true,
-      },
+      // include: {
+      //   weeks: true,
+      // },
     });
 
     const users = (
@@ -28,6 +28,7 @@ export const mesocyclesRouter = createTRPCRouter({
       meso,
       name: meso.name,
       owner: users.find((user) => user.id === meso.ownerId),
+      active: meso.active,
     }));
   }),
 });

@@ -1,4 +1,6 @@
 import { useUser } from "@clerk/nextjs";
+import { type Exercise } from "@prisma/client";
+import next from "next";
 import { api } from "~/utils/api";
 
 export const useData = () => {
@@ -7,22 +9,24 @@ export const useData = () => {
   const { data: mesoData, isLoading: mesoIsLoading } =
     api.mesocycles.getAll.useQuery();
 
-  const { data: weekData, isLoading: weekIsLoading } =
-    api.weeks.getAll.useQuery();
+  // const { data: weekData, isLoading: weekIsLoading } =
+  //   api.weeks.getAll.useQuery();
 
   const { data: dayData, isLoading: dayIsLoading } = api.days.getAll.useQuery();
 
   const { data: exData, isLoading: exIsLoading } =
     api.exercises.getAll.useQuery();
 
+  const { data: setData, isLoading: setIsLoading } = api.sets.getAll.useQuery();
+
   const isLoading =
     exIsLoading ||
     mesoIsLoading ||
     dayIsLoading ||
-    weekIsLoading ||
+    setIsLoading ||
     !userIsLoaded;
 
-  const hasError = !exData || !mesoData || !dayData || !weekData || !user;
+  const hasError = !exData || !mesoData || !dayData || !setData || !user;
 
   if (isLoading) return { isLoading };
   if (hasError) return { hasError };
@@ -31,51 +35,88 @@ export const useData = () => {
     return mesoData.filter(({ meso }) => meso.ownerId === user.id);
   };
 
-  const getCurrMeso = () => {
-    return getCurrUserMesos()[0]?.meso; // todo
+  const getActiveMeso = () => {
+    const currUserMesos = getCurrUserMesos();
+
+    if (!currUserMesos) return undefined;
+
+    const activeMesos = currUserMesos.find(({ meso }) => meso.active);
+
+    return activeMesos ? activeMesos.meso : undefined;
   };
 
-  const getCurrMesoWeeks = () => {
-    return weekData.filter(
-      ({ week }) => week.mesocycleId === getCurrMeso()?.id,
+  // const getCurrMesoWeeks = () => {
+  //   return weekData.filter(
+  //     ({ week }) => week.mesocycleId === getCurrMeso()?.id,
+  //   );
+  // };
+
+  // const getCurrWeek = () => {
+  //   return getCurrMesoWeeks()[0]?.week; // todo
+  // };
+
+  // const getCurrWeekDays = () => {
+  //   return dayData.filter(({ day }) => day.weekId === getCurrWeek()?.id);
+  // };
+
+  const getActiveMesoDays = () => {
+    const activeMesoDays = dayData.filter(
+      ({ day }) => day.mesocycleId === getActiveMeso()?.id,
     );
+
+    return activeMesoDays.map((day) => ({
+      day: day.day,
+    }));
   };
 
-  const getCurrWeek = () => {
-    return getCurrMesoWeeks()[0]?.week; // todo
-  };
+  const getNextDay = () => {
+    const incompleteDays = getActiveMesoDays().filter(
+      ({ day }) => !day.completed,
+    );
 
-  const getCurrWeekDays = () => {
-    return dayData.filter(({ day }) => day.weekId === getCurrWeek()?.id);
-  };
+    const sortedDays = incompleteDays.sort((a, b) => {
+      if (a.day.weekNumber === b.day.weekNumber) {
+        return a.day.dayNumber - b.day.dayNumber;
+      }
+      return a.day.weekNumber - b.day.weekNumber;
+    });
 
-  const getCurrDay = () => {
-    const currWeek = getCurrWeek();
-    if (currWeek && currWeek.days.length > 0) {
-      return currWeek.days[0];
+    if (sortedDays.length > 0 && sortedDays[0]) {
+      return sortedDays[0].day;
     }
+
     return undefined;
   };
 
-  const getCurrDayExercises = () => {
-    const currDay = getCurrDay();
-    if (currDay) {
-      return exData.filter(({ exercise }) => exercise.days.includes(currDay));
-    }
-    return undefined;
+  const getNextDayExercises = () => {
+    const nextDay = getNextDay();
+
+    if (!nextDay) return undefined;
+
+    return nextDay.exercises.map((exercise) => ({
+      exercise,
+      sortedSets: getSortedSetsForExercise(exercise.id),
+    }));
+  };
+
+  const getSortedSetsForExercise = (exerciseId: Exercise["id"]) => {
+    const sets = setData.filter(({ set }) => set.exerciseId === exerciseId);
+
+    const sortedSets = sets.sort((a, b) => a.set.order - b.set.order);
+
+    return sortedSets;
   };
 
   return {
-    // isLoading,
-    // hasError,
     user,
-    userIsLoaded,
     isSignedIn,
-    getCurrMeso,
-    getCurrMesoWeeks,
-    getCurrWeek,
-    getCurrWeekDays,
-    getCurrDay,
-    getCurrDayExercises,
+    isLoading,
+    hasError,
+    getCurrUserMesos,
+    getActiveMeso,
+    getActiveMesoDays,
+    getNextDay,
+    getNextDayExercises,
+    getSortedSetsForExercise,
   };
 };

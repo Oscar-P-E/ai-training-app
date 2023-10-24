@@ -5,7 +5,7 @@ export const daysRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const days = await ctx.db.day.findMany({
       include: {
-        week: true, // Eager load
+        // week: true, // Eager load
         exercises: true, // Eager load
       },
     });

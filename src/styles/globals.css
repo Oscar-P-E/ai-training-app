@@ -4,6 +4,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @layer base {
+  :root {
+    --text: #151415;
+    --background: #eeedee;
+    --primary: #454347;
+    --secondary: #dbdadc;
+    --accent: #767279;
+  }
+  .dark {
+    --text: #ebeaeb;
+    --background: #121112;
+    --primary: #bab8bc;
+    --secondary: #242325;
+    --accent: #8a868d;
+  }
+}, */
+
 .bg-primary {
   @apply bg-neutral-950;
 }
@@ -45,7 +62,7 @@
 }
 
 body {
-  @apply font-body bg-primary text-primary;
+  @apply bg-primary text-primary font-body;
 }
 
 input,
