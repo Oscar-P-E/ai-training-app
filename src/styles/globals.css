@@ -37,8 +37,16 @@
   @apply bg-neutral-900;
 }
 
+.text-secondary {
+  @apply text-neutral-900;
+}
+
 .bg-accent {
   @apply bg-red-700;
+}
+
+.bg-accent-dark {
+  @apply bg-red-900;
 }
 
 .text-accent {

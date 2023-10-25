@@ -1,6 +1,5 @@
 import { useUser } from "@clerk/nextjs";
 import { type Exercise } from "@prisma/client";
-import next from "next";
 import { api } from "~/utils/api";
 
 export const useData = () => {
@@ -8,9 +7,6 @@ export const useData = () => {
 
   const { data: mesoData, isLoading: mesoIsLoading } =
     api.mesocycles.getAll.useQuery();
-
-  // const { data: weekData, isLoading: weekIsLoading } =
-  //   api.weeks.getAll.useQuery();
 
   const { data: dayData, isLoading: dayIsLoading } = api.days.getAll.useQuery();
 
@@ -44,20 +40,6 @@ export const useData = () => {
 
     return activeMesos ? activeMesos.meso : undefined;
   };
-
-  // const getCurrMesoWeeks = () => {
-  //   return weekData.filter(
-  //     ({ week }) => week.mesocycleId === getCurrMeso()?.id,
-  //   );
-  // };
-
-  // const getCurrWeek = () => {
-  //   return getCurrMesoWeeks()[0]?.week; // todo
-  // };
-
-  // const getCurrWeekDays = () => {
-  //   return dayData.filter(({ day }) => day.weekId === getCurrWeek()?.id);
-  // };
 
   const getActiveMesoDays = () => {
     const activeMesoDays = dayData.filter(
